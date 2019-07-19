@@ -12,8 +12,8 @@ import (
 )
 ```
 ### mysql 连接配置
+> 结构体定义---------------------------------
 ```go
-//结构体定义---------------------------------
 /*
 Users mysql user表
 */
@@ -26,10 +26,14 @@ type Users struct {
 	CreateTime	string  `json:"createTime"`
 	UpdateTime	string  `json:"updateTime"`
 }
-//声明结构体变量-----------------------------
+```
+> 声明结构体变量-----------------------------
+```go
 var myuser Users
-
-//函数或方法中进行调用
+```
+> 函数或方法中进行调用-----------------------
+```go
+//
 db,err := sql.Open("mysql","root:opsbible@tcp(localhost:3306)/opsbible")
 if err != nil {
 	panic(err.Error())
