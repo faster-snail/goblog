@@ -18,7 +18,7 @@ import (
 Users mysql user表
 */
 type Users struct {
-	ID          int  	`json:"id"`
+	ID          int     `json:"id"`
 	User		string  `json:"user"`
 	Password	string  `json:"password"`
 	Email		string  `json:"email"`
