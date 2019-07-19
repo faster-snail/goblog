@@ -30,30 +30,42 @@ type Users struct {
 > 声明结构体变量-----------------------------
 ```go
 var myuser Users
+var myusers []Users
 ```
 > 函数或方法中进行调用-----------------------
 ```go
-//
-db,err := sql.Open("mysql","root:opsbible@tcp(localhost:3306)/opsbible")
-if err != nil {
-	panic(err.Error())
+func getUser (w http.ResponseWriter, r *http.Request) {
+    db,err := sql.Open("mysql","root:opsbible@tcp(localhost:3306)/opsbible")
+    if err != nil {
+    	panic(err.Error())
+    }
+    defer db.Close()
+    if db.Ping() != nil {
+    	panic(err.Error())
+    }
+    q,err := db.Query("select id,user,name,password,email,create_time,update_time from user where id = 0")
+    if err != nil {
+    	panic(err.Error())
+    }
+    defer q.Close()
+    for q.Next() {
+    	err = q.Scan(&myuser.ID, &myuser.User, &myuser.Name, &myuser.Password,  &myuser.Email,& myuser.CreateTime,&myuser.UpdateTime)
+    	if err != nil {
+    		panic(err.Error())
+        }
+        myusers = append(myusers,myuser)
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(myusers)
 }
-defer db.Close()
-err = db.Ping()
-if err != nil {
-	panic(err.Error())
-}
-fmt.Println("db is ok")
-q,err := db.Query("select id,user,name,password,email,create_time,update_time from userwhere id = 0")
-if err != nil {
-	panic(err.Error())
-}
-defer q.Close()
-for q.Next() {
-	err = q.Scan(&myuser.ID, &myuser.User, &myuser.Name, &myuser.Password,  &myuser.Email,&myuser.CreateTime,&myuser.UpdateTime)
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Println()
+
+```
+### mux 操作
+```go
+func main() {
+	r := mux.NewRouter()
+	r.HandleFunc("/api/user", getUser).Methods("GET")
+	log.Fatal(http.ListenAndServe(":8080",r))
 }
 ```
