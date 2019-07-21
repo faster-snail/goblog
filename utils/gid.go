@@ -37,7 +37,7 @@ func NewID () int64 {
 	return newID
 }
 
-//InitIDWorker 初始化id
+
 func (iw *iDWorker) initIDWorker(workerID, datacenterID int64) error {
 
 	var baseValue int64 = -1
@@ -69,7 +69,7 @@ func (iw *iDWorker) initIDWorker(workerID, datacenterID int64) error {
 	iw.datacenterID = datacenterID
 	return nil
 }
-//NextID 生成id
+
 func (iw *iDWorker) nextID() (int64, error) {
 	iw.idLock.Lock()
 	timestamp := time.Now().UnixNano()
